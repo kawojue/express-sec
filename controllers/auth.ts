@@ -1,4 +1,3 @@
-import crypto from 'crypto'
 import bcrypt from 'bcrypt'
 import prisma from '../prisma'
 import genToken from '../utils/genToken'
@@ -40,8 +39,8 @@ const signup = expressAsyncHandler(async (req: Request, res: Response) => {
         return
     }
 
-    const ipAddress: string = req.ip
     const userAgent = req.headers['user-agent']
+    const ipAddress: string | undefined = req.socket.remoteAddress?.split(":")[3]
 
     if (!userAgent || !ipAddress) {
         res.status(400).json({
@@ -100,7 +99,7 @@ const login = expressAsyncHandler(async (req: Request, res: Response) => {
 
 const logout = expressAsyncHandler(async (req: Request, res: Response) => {
     const authHeader = req.headers.authorization
-    if (!authHeader || authHeader.startsWith('Bearer')) {
+    if (!authHeader || !authHeader.startsWith('Bearer')) {
         res.sendStatus(204)
         return
     }
@@ -147,7 +146,7 @@ const profile = expressAsyncHandler(async (req: Request, res: Response) => {
     }
 
     res.status(200).json({
-        account,
+        account, // remove pswd, token, ..
         success: true
     })
 })
