@@ -8,7 +8,7 @@ function compareObjects(objects: any[]) {
         const currentObject: any = objects[i]
 
         if (
-            currentObject.ip !== referenceObject.ip ||
+            currentObject.ipAddress !== referenceObject.ipAddress ||
             currentObject.userAgent !== referenceObject.userAgent
         ) {
             return false
