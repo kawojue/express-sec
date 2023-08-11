@@ -1,9 +1,13 @@
 import { Router } from 'express'
-import { signup, login } from '../controllers/auth'
+import verify from '../middlewares/verification'
+import { signup, login, profile, logout } from '../controllers/auth'
 
 const authRouter: Router = Router()
 
 authRouter.post('/login', login)
 authRouter.post('/signup', signup)
+
+authRouter.get('/logout', verify, logout)
+authRouter.get('/profile', verify, profile)
 
 export default authRouter
