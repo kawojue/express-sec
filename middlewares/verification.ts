@@ -8,9 +8,10 @@ const expressAsyncHandler = require('express-async-handler')
 const verify = expressAsyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization
     const deviceId = {
-        ipAddress: req.ip,
-        userAgent: req.headers['user-agent']
+        userAgent: req.headers['user-agent'],
+        ipAddress: req.socket.remoteAddress?.split(":")[3],
     }
+
     if (!authHeader || !authHeader?.startsWith('Bearer')) {
         res.status(401).json({
             success: false,
@@ -49,6 +50,9 @@ const verify = expressAsyncHandler(async (req: Request, res: Response, next: Nex
                 })
                 return
             }
+
+            // @ts-ignore
+            req.user = decoded
             next()
         }
     )
